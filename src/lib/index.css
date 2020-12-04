@@ -1,6 +1,4 @@
-.canvas {
-  height: 100vh;
-}
+
 .dragging {
   z-index: 111 !important
 }

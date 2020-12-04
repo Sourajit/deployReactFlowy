@@ -11,7 +11,7 @@ const initialState = {
   "prevblock": 0
 }
 
-const reducer = produce((draft, action) => {
+const flowyreducer = produce((draft, action) => {
   switch (action.type) {
     case 'UPDATE':
       draft[action.key] = action.payload;
@@ -30,4 +30,4 @@ const reducer = produce((draft, action) => {
   }
 },initialState);
 
-export default reducer;
+export default flowyreducer;

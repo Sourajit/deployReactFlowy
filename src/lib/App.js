@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react'
+import LeftCard from '../container/leftcard'
+import Draggable from '../components/draggable'
 import { createStore, applyMiddleware } from 'redux'
 import createSagaMiddleware from 'redux-saga'
-import { Provider } from 'react-redux'
-import reducer from './reducers'
-import rootSaga from './sagas'
+import reducer from '../reducers/flowy'
+import rootSaga from '../sagas'
+import './index.css'
 
 const sagaMiddleware = createSagaMiddleware()
 const store = createStore(reducer, applyMiddleware(sagaMiddleware))
 sagaMiddleware.run(rootSaga)
-const action = (type,payload,key) => store.dispatch({ type , payload,key})
+const action = (type,payload,key) => store.dispatch({ type, payload, key})
 var blocks = [];
 var blockstemp = [];
 var canvas_div;
@@ -101,6 +103,7 @@ export const _import = function(output) {
   }
   export const beginDrag = function(event) {
     var mouse_x, mouse_y;
+    
     if (window.getComputedStyle(canvas_div).position == "absolute" || window.getComputedStyle(canvas_div).position == "fixed") {      
         action("UPDATE",canvas_div.getBoundingClientRect().left,"absx");
         action("UPDATE",canvas_div.getBoundingClientRect().top,"absy");
@@ -114,10 +117,12 @@ export const _import = function(output) {
     }
     if (event.which != 3 && event.target.closest(".create-flowy")) {
         original = event.target.closest(".create-flowy");
+        // var newNode = React.cloneElement(<Draggable />)
         var newNode = event.target.closest(".create-flowy").cloneNode(true);
         event.target.closest(".create-flowy").classList.add("dragnow");
         newNode.classList.add("block");
         newNode.classList.remove("create-flowy");
+        newNode.addEventListener("mouseup", endDrag, false);
         if (blocks.length === 0) {
             newNode.innerHTML += "<input type='hidden' name='blockid' class='blockid' value='" + blocks.length + "'>";
             document.body.appendChild(newNode);
@@ -137,6 +142,7 @@ export const _import = function(output) {
     }
   }
   export const endDrag = function(event) {
+      
     if (event.which != 3 && (store.getState().active || rearrange)) {
         action("UPDATE",false,"dragblock");
         blockReleased();
@@ -380,6 +386,7 @@ export const _import = function(output) {
   }
 
   function touchblock(event) {
+    
     action("UPDATE",false,"dragblock");
     var mouse_x, mouse_y;
     if (hasParentClass(event.target, "block")) {
@@ -641,32 +648,35 @@ export const _import = function(output) {
         };
     }
     useEffect(() => {
-        load(props);
-        document.addEventListener("mousedown", beginDrag);
-        document.addEventListener("mousedown", touchblock, false);
-        document.addEventListener("touchstart", beginDrag);
-        document.addEventListener("touchstart", touchblock, false);
-        document.addEventListener("mouseup", touchblock, false);
-        document.addEventListener("mousemove", moveBlock, false);
-        document.addEventListener("touchmove", moveBlock, false);    
-        document.addEventListener("mouseup", endDrag, false);
-        document.addEventListener("touchend", endDrag, false); 
+         load(props);
+        // document.addEventListener("mousedown", beginDrag);
+        // document.addEventListener("mousedown", touchblock, false);
+        // document.addEventListener("touchstart", beginDrag);
+        // document.addEventListener("touchstart", touchblock, false);
+        // document.addEventListener("mouseup", touchblock, false);
+        // document.addEventListener("mousemove", moveBlock, false);
+        // document.addEventListener("touchmove", moveBlock, false);    
+        // document.addEventListener("mouseup", endDrag, false);
+        // document.addEventListener("touchend", endDrag, false); 
         return () => {
-            document.removeEventListener("mousedown", beginDrag);
-            document.removeEventListener("mousedown", touchblock, false);
-            document.removeEventListener("touchstart", beginDrag);
-            document.removeEventListener("touchstart", touchblock, false);
-            document.removeEventListener("mouseup", touchblock, false);
-            document.removeEventListener("mousemove", moveBlock, false);
-            document.removeEventListener("touchmove", moveBlock, false);
-            document.removeEventListener("mouseup", endDrag, false);
-            document.removeEventListener("touchend", endDrag, false);  
+            // document.removeEventListener("mousedown", beginDrag);
+            // document.removeEventListener("mousedown", touchblock, false);
+            // document.removeEventListener("touchstart", beginDrag);
+            // document.removeEventListener("touchstart", touchblock, false);
+            // document.removeEventListener("mouseup", touchblock, false);
+            // document.removeEventListener("mousemove", moveBlock, false);
+            // document.removeEventListener("touchmove", moveBlock, false);
+            // document.removeEventListener("mouseup", endDrag, false);
+            // document.removeEventListener("touchend", endDrag, false);  
         }
     }, [])
+     //drag={(e)=> moveBlock(e)} onMouseMove={(e)=> moveBlock(e)} onMouseUp={(e)=> { debugger; touchblock(e);endDrag(e);}}
     return (
-      <Provider store={store}>
-        <div id={props.id || "canvas"} className="canvas" onMouseDown={()=>{console.log("onTouchStart");debugger;}}></div>
-      </Provider>
+        <div className="react-flowy">
+            <LeftCard onDragStart={(e) => beginDrag(e)} />
+            <div id={props.id || "canvas"} className="canvas" onMouseMove={(e)=> moveBlock(e)}  
+            onDrop={(e) => endDrag(e)}></div>
+        </div>
       );    
   }
 
