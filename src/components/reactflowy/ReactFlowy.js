@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react'
-import LeftCard from '../container/leftcard'
-import Draggable from '../components/draggable'
+import LeftCard from '../../container/leftcard'
 import { createStore, applyMiddleware } from 'redux'
 import createSagaMiddleware from 'redux-saga'
-import reducer from '../reducers/flowy'
-import rootSaga from '../sagas'
+import reducer from '../../reducers/flowy'
+import rootSaga from '../../sagas'
 import './index.css'
 
 const sagaMiddleware = createSagaMiddleware()

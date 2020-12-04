@@ -1,6 +1,6 @@
 import React from 'react'
 import './index.css'
-import { deleteBlocks } from '../../lib'
+import { deleteBlocks } from '../../components/reactflowy'
 const Navigation = () => {
     return (
         <div id="navigation">

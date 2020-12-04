@@ -1,5 +1,5 @@
 import React  from 'react'
-import {ReactFlowy } from './lib'
+import {ReactFlowy } from './components/reactflowy'
 import Navigation from './container/navigation'
 import LeftCard from './container/leftcard'
 import PropsWrap from './container/propswrap'
